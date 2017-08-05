@@ -32,7 +32,7 @@
           <div class="panel-heading">
             <h3 class="panel-title"><strong>Current Reservations</strong></h3>
           </div>
-          <div class="panel-body">
+          <div class="panel-body" id="tableSection">
           </div>
         </div>
 
@@ -46,7 +46,7 @@
             <div class="panel-heading">
               <h3 class="panel-title"><strong>Waiting List</strong></h3>
             </div>
-            <div class="panel-body">
+            <div class="panel-body" id="waitSection">
             </div>
           </div>
 
@@ -61,23 +61,77 @@
     </footer>
 
   <script type="text/javascript">
-    // Question: What does this code do?
-    $("#add-btn").on("click", function(event) {
-      event.preventDefault();
-      var newCharacter = {
-        name: $("#name").val().trim(),
-        role: $("#role").val().trim(),
-        age: $("#age").val().trim(),
-        forcePoints: $("#force-points").val().trim()
-      };
+    function runTableQuery() {
+      var currentURL = window.location.origin;
+      $.ajax({ url: currentURL + "api/tables", method: "GET"}
+        )
+      .done(function(tableData)) {
+        console.log("------------------------------------");
+        console.log("URL: " + currentURL + "/api/tables");
+        console.log("------------------------------------");  
 
-      // Question: What does this code do??
-      $.post("/api/new", newCharacter)
-      .done(function(data) {
-        console.log(data);
-        alert("Adding character...");
+        console.log(tableData);
+        console.log("------------------------------------");
+
+        for (var i = 0; i < tableData.length; i++) {
+          var tableSection = $("<div>");
+          tableSection.addClass("well");
+          tableSection.attr("id", "tableWell-" + i + 1);
+          $("#tableSection").append(tableSection);
+
+          var tableNum = i + 1;
+
+          $("#tableWell-" + i + 1).append("<h2><span class='label label-primary'>" + tableNum + "</span> | " + tableData[i].ID + "</h2>");
+        }
       });
+    }
+
+    function runWaitListQuery() {
+      var currentURL = window.location.origin;
+
+      $.ajax({ url: currentURL + "/api/waitlist", method: "GET"
+        })
+      .done(function(waitlistData) {
+        console.log("------------------------------------");
+        console.log("URL: " + currentURL + "/api/waitlist");
+        console.log("------------------------------------");
+
+        console.log(waitlistData);
+        console.log("------------------------------------");
+
+        for (var i = 0; i < waitlistData.length; i++) {
+
+          // Create the HTML Well (Section) and Add the table content for each reserved table
+          var waitlistSection = $("<div>");
+          waitlistSection.addClass("well");
+          waitlistSection.attr("id", "waitlistWell-" + i + 1);
+          $("#waitlistSection").append(waitlistSection);
+
+          var tableNum = i + 1;
+
+          // Then display the remaining fields in the HTML (Section Name, Date, URL)
+          $("#waitlistWell-" + i + 1).append("<h2><span class='label label-primary'>" + tableNum + "</span> | " + waitlistData[i].ID + "</h2>");
+        }
+      });
+    }
+
+    function clearTable() {
+
+      var currentURL = window.location.origin;
+      $.ajax({ url: currentURL + "/api/clear", method: "POST" });
+
+    }
+
+    $("#clear").on("click", function() {
+      alert("Clearing...");
+      clearTable();
+
+      // Refresh the page after data is cleared
+      location.reload();
+
     });
+    runTableQuery();
+    runWaitListQuery();
   </script>
 
 </body>

@@ -51,7 +51,7 @@
             </form>
             <br>
             <div class="text-left">
-              <button type="submit" class="btn btn-danger btn-md" id="add-btn"><!-- <span class="glyphicon glyphicon-fire"> --></span> Submit</button>
+              <button type="submit" class="btn btn-danger btn-md" id="submit"><!-- <span class="glyphicon glyphicon-fire"> --></span> Submit</button>
             </div>
           </div>
         </div>
@@ -68,20 +68,31 @@
 
   <script type="text/javascript">
     // Question: What does this code do?
-    $("#add-btn").on("click", function(event) {
+    $("#submit").on("click", function(event) {
       event.preventDefault();
       var newTable = {
         name: $("#name").val().trim(),
-        phonenum: $("#phonenum").val().trim(),
-        email: $("#age").val().trim(),
-        uniqueID: $("#force-points").val().trim()
+        number: $("#phonenum").val().trim(),
+        email: $("#email").val().trim(),
+        ID: $("#id").val().trim()
       };
 
+      console.log(newTable);
+
       // Question: What does this code do??
-      $.post("/api/new", newTable)
+      $.post("/api/table", newTable)
       .done(function(data) {
-        console.log(data);
-        alert("Adding table...");
+        if (data) {
+          alert("Booked!")
+        }
+
+        else{
+          alert("Apologies, you're on the wait list");
+        }
+        $("#name").val("");
+        $("#phonenum").val("");
+        $("#email").val("");
+        $("#id").val("");
       });
     });
   </script>
