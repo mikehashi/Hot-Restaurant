@@ -38,13 +38,19 @@
               <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" class="form-control" id="name">
+                <br>
+                <label for="name">Phone Number</label>
+                <input type="text" class="form-control" id="phonenum">
+                <br>
+                <label for="name">Email</label>
+                <input type="text" class="form-control" id="email">
+                <br>
+                <label for="name">Unique ID</label>
+                <input type="text" class="form-control" id="id">
               </div>
-
-        
-
             </form>
             <br>
-            <div class="text-right">
+            <div class="text-left">
               <button type="submit" class="btn btn-danger btn-md" id="add-btn"><!-- <span class="glyphicon glyphicon-fire"> --></span> Submit</button>
             </div>
           </div>
@@ -54,22 +60,28 @@
     </div>
   </div>
 
+   <footer class="footer">
+      <div class="container">
+          <p><a href="/api/tables">API Table Link</a> | <a href="/api/waitlist">API Wait List</a></p>
+      </div>
+    </footer>
+
   <script type="text/javascript">
     // Question: What does this code do?
     $("#add-btn").on("click", function(event) {
       event.preventDefault();
-      var newCharacter = {
+      var newTable = {
         name: $("#name").val().trim(),
-        role: $("#role").val().trim(),
-        age: $("#age").val().trim(),
-        forcePoints: $("#force-points").val().trim()
+        phonenum: $("#phonenum").val().trim(),
+        email: $("#age").val().trim(),
+        uniqueID: $("#force-points").val().trim()
       };
 
       // Question: What does this code do??
-      $.post("/api/new", newCharacter)
+      $.post("/api/new", newTable)
       .done(function(data) {
         console.log(data);
-        alert("Adding character...");
+        alert("Adding table...");
       });
     });
   </script>
